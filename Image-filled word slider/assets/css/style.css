@@ -1,0 +1,26 @@
+.ttc-ticker-wrapper .swiper-container {
+    overflow: hidden;
+}
+
+.ttc-ticker-wrapper .swiper-wrapper {
+    transition-timing-function: linear;
+}
+
+.ttc-ticker-wrapper .ttc-ticker-item {
+    width: auto;
+    display: flex;
+    align-items: center;
+}
+
+.ttc-ticker-wrapper .ttc-ticker-item h2 {
+    display: inline-block;
+    margin: 0;
+    background-size: cover;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* Fallback */
+    white-space: nowrap;
+}
