@@ -1,0 +1,84 @@
+.ors-adv-heading-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Alignment - Desktop */
+.ors-adv-heading-wrapper.elementor-align-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.ors-adv-heading-wrapper.elementor-align-center {
+    align-items: center;
+    text-align: center;
+}
+
+.ors-adv-heading-wrapper.elementor-align-right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.ors-adv-heading-wrapper.elementor-align-justify {
+    text-align: justify;
+}
+
+/* Alignment - Tablet */
+.ors-adv-heading-wrapper.elementor-align-tablet-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.ors-adv-heading-wrapper.elementor-align-tablet-center {
+    align-items: center;
+    text-align: center;
+}
+
+.ors-adv-heading-wrapper.elementor-align-tablet-right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.ors-adv-heading-wrapper.elementor-align-tablet-justify {
+    text-align: justify;
+}
+
+/* Alignment - Mobile */
+.ors-adv-heading-wrapper.elementor-align-mobile-left {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.ors-adv-heading-wrapper.elementor-align-mobile-center {
+    align-items: center;
+    text-align: center;
+}
+
+.ors-adv-heading-wrapper.elementor-align-mobile-right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.ors-adv-heading-wrapper.elementor-align-mobile-justify {
+    text-align: justify;
+}
+
+
+/* Default Styles */
+.ors-adv-pre-title {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Main Title Structure */
+.ors-adv-main-title {
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    display: block;
+}
+
+/* Part 2 (Span) */
+/* .ors-adv-title-part-2 { } */
