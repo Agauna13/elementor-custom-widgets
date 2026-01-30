@@ -1,0 +1,94 @@
+.scroll-menu-widget .menu {
+	display: flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	flex-wrap: wrap;
+	align-items: center;
+	/* Align items vertically */
+}
+
+.scroll-menu-widget .menu-item {
+	padding: 0;
+	position: relative;
+	/* Context for absolute submenus */
+}
+
+.scroll-menu-widget .menu-item a {
+	text-decoration: none;
+	color: var(--scroll-menu-default-color, #333);
+	transition: color 0.3s ease;
+	display: block;
+	padding: 10px 15px;
+	/* Give some click area */
+	white-space: nowrap;
+}
+
+.scroll-menu-widget.is-scrolled .menu-item a {
+	color: var(--scroll-menu-scroll-color, #333);
+}
+
+/* Submenu Styles */
+.scroll-menu-widget .sub-menu {
+	display: none;
+	/* Inherit logic from themes usually, but force here */
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 999;
+	background-color: #fff;
+	/* Default, overridden by control */
+	list-style: none;
+	padding: 10px 0;
+	min-width: 200px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	/* Basic shadow */
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(10px);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+/* Show Submenu on Hover */
+.scroll-menu-widget .menu-item:hover>.sub-menu {
+	display: block;
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+/* Submenu Link Colors - inherit or override? 
+   By default, let's keep them detecting the scroll color unless overridden by specific controls 
+   Note: The controls added in PHP output selectors that will override these basics if changed. 
+*/
+
+/* Nested Submenus (Level 2+) */
+.scroll-menu-widget .sub-menu .sub-menu {
+	top: 0;
+	left: 100%;
+}
+
+/* Indicators */
+.scroll-menu-widget .menu-item-has-children>a::after {
+	content: '';
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-right: 2px solid currentColor;
+	/* Use currentColor to inherit the scroll color */
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg);
+	margin-left: 8px;
+	margin-bottom: 2px;
+	transition: transform 0.3s;
+}
+
+/* Rotate indicator on hover */
+.scroll-menu-widget .menu-item-has-children:hover>a::after {
+	transform: rotate(225deg) translateY(-2px);
+}
+
+/* Hide indicators if option selected */
+.scroll-menu-widget.hide-indicators .menu-item-has-children>a::after {
+	display: none;
+}
