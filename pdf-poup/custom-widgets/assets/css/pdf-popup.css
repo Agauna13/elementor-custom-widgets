@@ -1,0 +1,146 @@
+/* Enterprise PDF Popup Variables */
+:root {
+    --ep-pdf-trans-speed: 0.3s;
+    --ep-pdf-modal-z-index: 9999;
+}
+
+/* Trigger Styles */
+.ep-pdf-trigger {
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.ep-pdf-trigger-button {
+    /* Basic button styles if no custom styles applied */
+    padding: 10px 20px;
+}
+
+/* Modal Wrapper - Hidden by default */
+.ep-pdf-modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--ep-pdf-trans-speed) ease, visibility var(--ep-pdf-trans-speed) ease;
+}
+
+/* Active State for Modal */
+.ep-pdf-modal-wrapper.ep-pdf-is-open {
+    z-index: var(--ep-pdf-modal-z-index);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Overlay */
+.ep-pdf-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Background and Backdrop filter handled by widget controls */
+}
+
+/* Modal Window */
+.ep-pdf-modal {
+    background: #fff;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+    /* Dimensions handled by widget controls */
+    transform: scale(0.95);
+    transition: transform var(--ep-pdf-trans-speed) ease;
+}
+
+.ep-pdf-modal-wrapper.ep-pdf-is-open .ep-pdf-modal {
+    transform: scale(1);
+}
+
+/* Modal Header */
+.ep-pdf-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.ep-pdf-modal-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.ep-pdf-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 5px;
+    color: #333;
+    transition: opacity 0.2s;
+}
+
+.ep-pdf-close-btn:hover {
+    opacity: 0.7;
+}
+
+/* Modal Content */
+.ep-pdf-modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background: #f4f4f4;
+    overflow: hidden;
+    /* Ensure rounded corners work if set */
+}
+
+.ep-pdf-iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.ep-pdf-placeholder {
+    padding: 40px;
+    text-align: center;
+    color: #666;
+}
+
+/* Utility: Lock Body Scroll */
+body.ep-pdf-scroll-lock {
+    overflow: hidden;
+}
+
+/* Elementor Editor Preview Hacks */
+.elementor-editor-active .ep-pdf-editor-preview {
+    /* Reset fixed positioning for editor output allows inspecting markup */
+    position: relative !important;
+    z-index: 1 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    display: none;
+    /* Hide by default, user can click to see? or we show inline */
+}
+
+/* To actually see the modal layout in editor without clicking, we might want to just show it temporarily or relies on preview mode. 
+   However, forcing it `display: none` prevents it from blocking the trigger. 
+   Let's keep it hidden in editor flow unless we want a "Preview Mode" toggle. 
+   For now, we leave it as valid HTML that doesn't obstruct editing. 
+*/
