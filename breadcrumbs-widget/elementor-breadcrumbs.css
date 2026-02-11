@@ -1,0 +1,60 @@
+/* Elementor Breadcrumbs CSS */
+
+.elementor-breadcrumbs-container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+}
+
+.elementor-breadcrumbs-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.elementor-breadcrumbs-item {
+	display: inline-flex;
+	align-items: center;
+	font-size: inherit;
+	line-height: inherit;
+	margin: 0;
+}
+
+.elementor-breadcrumbs-item a {
+	text-decoration: none;
+	color: inherit;
+	transition: color 0.3s;
+	display: inline-flex;
+	align-items: center;
+}
+
+.elementor-breadcrumbs-separator {
+	display: inline-flex;
+	align-items: center;
+	margin: 0 5px; /* Default spacing, overridden by controls */
+	line-height: 1;
+}
+
+.elementor-breadcrumbs-icon {
+	margin-right: 5px;
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+}
+
+.elementor-breadcrumbs-icon i,
+.elementor-breadcrumbs-icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+/* Current Item default style */
+.elementor-breadcrumbs-item.current-item {
+	font-weight: 700;
+}

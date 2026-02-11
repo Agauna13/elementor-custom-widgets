@@ -1,0 +1,158 @@
+/*
+ * ESTILOS WIDGET MENU MOBILE (Acordeón con submenús anidados)
+ * Versión limpia (sin parches): incluye soporte para niveles internos y reset del botón toggle.
+ */
+
+/* Contenedor principal */
+.mobile-menu-accordion {
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+}
+
+/* =========================================================
+   ESTRUCTURA DE ITEMS (nivel 1 y niveles internos)
+   - Flex para alinear texto a la izquierda y toggle a la derecha
+   - flex-wrap para que el submenú “caiga” debajo ocupando 100%
+   ========================================================= */
+
+.mobile-menu-item,
+.mobile-menu-sub-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+  border-bottom: none;
+}
+
+/* Enlace del item (nivel 1 y niveles internos) */
+.mobile-menu-item > a,
+.mobile-menu-sub-item > a {
+  flex-grow: 1;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Tamaños/padding diferenciados por nivel */
+.mobile-menu-item > a {
+  padding: 15px 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.mobile-menu-sub-item > a {
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.mobile-menu-item > a:hover, .mobile-menu-sub-item > a {
+	color: #5a7d99;
+}
+
+/* =========================================================
+   TOGGLE (botón del acordeón)
+   - Reset completo de estilos de <button> (evita fondo azul, bordes, etc.)
+   - Área táctil estable (40x40)
+   ========================================================= */
+
+.mobile-menu-toggle {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* Reset de botón (muy importante para Astra/Elementor) */
+  background: transparent !important;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: 1;
+}
+
+.mobile-menu-toggle:hover {
+	background: transparent !important;
+}
+
+/* Elimina estilos de focus del tema si te “pinta” bordes raros */
+.mobile-menu-toggle:focus,
+.mobile-menu-toggle:focus-visible {
+  outline: none;
+}
+
+/* Iconos: soporta <i> (FontAwesome) y <svg> (Elementor Icons) */
+.mobile-menu-toggle i,
+.mobile-menu-toggle svg {
+  display: block;
+  line-height: 1;
+}
+
+/* Si Elementor renderiza SVG, lo ajustamos a la unidad del icon size */
+.mobile-menu-toggle svg {
+  width: 1em;
+  height: 1em;
+  max-width: 1em;
+  max-height: 1em;
+}
+
+/* Contenedor de iconos (si usas .icon-open / .icon-close) */
+.mobile-menu-toggle .mobile-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Por defecto: se muestra el icono OPEN */
+.mobile-menu-toggle .icon-close {
+  display: none;
+}
+
+/* Cuando el item está abierto: se muestra CLOSE y se oculta OPEN */
+.mobile-menu-item.active > .mobile-menu-toggle .icon-open,
+.mobile-menu-sub-item.active > .mobile-menu-toggle .icon-open {
+  display: none;
+}
+
+.mobile-menu-item.active > .mobile-menu-toggle .icon-close,
+.mobile-menu-sub-item.active > .mobile-menu-toggle .icon-close {
+  display: inline-flex;
+}
+
+/* =========================================================
+   ESTADOS ACTIVOS
+   ========================================================= */
+
+/* Color del texto activo */
+.mobile-menu-item.active > a,
+.mobile-menu-sub-item.active > a {
+  color: #5a7d99 !important;
+}
+
+/* Color del icono activo */
+.mobile-menu-item.active > .mobile-menu-toggle,
+.mobile-menu-sub-item.active > .mobile-menu-toggle {
+  color: #5a7d99;
+}
+
+/* =========================================================
+   SUBMENÚS
+   - Por defecto ocultos (jQuery slideDown/Up gestiona display)
+   - Indentación por nivel (se acumula al anidar)
+   ========================================================= */
+
+.mobile-menu-submenu {
+  width: 100%;
+  display: none;
+  padding-left: 15px;
+  background-color: transparent;
+}
+
+/* Opcional: un poco más de indentación en subniveles */
+.mobile-menu-submenu .mobile-menu-submenu {
+  padding-left: 15px;
+}
