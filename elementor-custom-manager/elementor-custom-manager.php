@@ -25,10 +25,122 @@ class Elementor_Custom_Widget_Manager {
 		// Admin Menu for Uploads
 		add_action( 'admin_menu', [ $this, 'register_admin_menu' ] );
 		
-		// Widget Registration (The "Auto-Loader")
-		add_action( 'elementor/widgets/register', [ $this, 'register_widgets' ], 99 ); // Late priority to ensure theme is loaded
-		add_action( 'elementor/frontend/after_enqueue_styles', [ $this, 'enqueue_assets' ] );
-		add_action( 'elementor/frontend/after_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		// Setup theme automatically
+		add_action( 'admin_init', [ $this, 'setup_theme_loader' ] );
+	}
+	
+	public function setup_theme_loader() {
+		$theme_dir = get_stylesheet_directory();
+		$widgets_dir = $theme_dir . '/custom-widgets';
+		$loader_file = $widgets_dir . '/widgets-loader.php';
+		$functions_file = $theme_dir . '/functions.php';
+
+		// 1. Create directory if not exists
+		if ( ! is_dir( $widgets_dir ) ) {
+			wp_mkdir_p( $widgets_dir );
+		}
+		
+		// Create subdirectories just in case
+		wp_mkdir_p( $widgets_dir . '/widgets' );
+		wp_mkdir_p( $widgets_dir . '/assets/css' );
+		wp_mkdir_p( $widgets_dir . '/assets/js' );
+
+		// 2. Generate loader file
+		$loader_content = '<?php
+namespace AG_Custom_Widgets;
+
+if ( ! defined( "ABSPATH" ) ) exit;
+
+class Widgets_Loader {
+
+	private static $_instance = null;
+
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+	private function __construct() {
+		add_action( "elementor/widgets/register", [ $this, "register_widgets" ] );
+		add_action( "elementor/frontend/after_register_styles", [ $this, "register_styles" ] );
+		add_action( "elementor/frontend/after_register_scripts", [ $this, "register_scripts" ] );
+	}
+
+	public function register_widgets( $widgets_manager ) {
+		$widgets_dir = __DIR__ . "/widgets/";
+		if ( ! is_dir( $widgets_dir ) ) return;
+
+		$files = glob( $widgets_dir . "*.php" );
+		if ( ! $files ) return;
+
+		foreach ( $files as $file ) {
+			$classes_before = get_declared_classes();
+			require_once $file;
+			$classes_after = get_declared_classes();
+			$new_classes = array_diff( $classes_after, $classes_before );
+
+			foreach ( $new_classes as $class ) {
+				if ( class_exists( $class ) && is_subclass_of( $class, "\Elementor\Widget_Base" ) ) {
+					$widgets_manager->register( new $class() );
+				}
+			}
+		}
+	}
+
+	public function register_styles() {
+		$css_dir = __DIR__ . "/assets/css/";
+		$css_uri = get_stylesheet_directory_uri() . "/custom-widgets/assets/css/";
+		if ( ! is_dir( $css_dir ) ) return;
+
+		$files = glob( $css_dir . "*.css" );
+		if ( ! $files ) return;
+
+		$version = wp_get_theme()->get( "Version" );
+
+		foreach ( $files as $file ) {
+			$filename = basename( $file );
+			$handle   = "ag-widget-" . basename( $filename, ".css" );
+			wp_register_style( $handle, $css_uri . $filename, [], $version );
+		}
+	}
+
+	public function register_scripts() {
+		$js_dir = __DIR__ . "/assets/js/";
+		$js_uri = get_stylesheet_directory_uri() . "/custom-widgets/assets/js/";
+		if ( ! is_dir( $js_dir ) ) return;
+
+		$files = glob( $js_dir . "*.js" );
+		if ( ! $files ) return;
+
+		$version = wp_get_theme()->get( "Version" );
+
+		foreach ( $files as $file ) {
+			$filename = basename( $file );
+			$handle   = "ag-widget-" . basename( $filename, ".js" );
+			wp_register_script( $handle, $js_uri . $filename, [ "jquery", "elementor-frontend" ], $version, true );
+		}
+	}
+}
+
+Widgets_Loader::instance();
+';
+		if ( ! file_exists( $loader_file ) || file_get_contents( $loader_file ) !== $loader_content ) {
+			file_put_contents( $loader_file, $loader_content );
+		}
+
+		// 3. Inject into functions.php
+		if ( file_exists( $functions_file ) ) {
+			$functions_content = file_get_contents( $functions_file );
+			$require_statement = "require_once get_stylesheet_directory() . '/custom-widgets/widgets-loader.php';";
+			
+			if ( strpos( $functions_content, 'widgets-loader.php' ) === false ) {
+				// Append to functions.php
+				$functions_content .= "\n\n// Elementor Custom Widgets Loader\n" . $require_statement . "\n";
+				file_put_contents( $functions_file, $functions_content );
+			}
+		}
 	}
 
 	/**
@@ -99,11 +211,11 @@ class Elementor_Custom_Widget_Manager {
 				$fileinfo = pathinfo( $filename );
 				
 				// Skip directories and __MACOSX garbage
-				if ( substr( $filename, -1 ) == '/' || strpos( $filename, '__MACOSX' ) !== false ) {
+				if ( substr( $filename, -1 ) === '/' || strpos( $filename, '__MACOSX' ) !== false ) {
 					continue;
 				}
 
-				$extension = strtolower( $fileinfo['extension'] );
+				$extension = isset( $fileinfo['extension'] ) ? strtolower( $fileinfo['extension'] ) : '';
 				$target_path = '';
 
 				if ( $extension === 'php' ) {
@@ -133,62 +245,6 @@ class Elementor_Custom_Widget_Manager {
 			return "Success! Installed $extracted_count files to child theme.";
 		} else {
 			return 'Error: Failed to open ZIP file.';
-		}
-	}
-
-	/**
-	 * 2. Auto-Registration Logic
-	 */
-	public function register_widgets( $widgets_manager ) {
-		$widgets_dir = get_stylesheet_directory() . '/custom-widgets/widgets/';
-
-		if ( ! is_dir( $widgets_dir ) ) {
-			return;
-		}
-
-		$files = glob( $widgets_dir . '*.php' );
-
-		foreach ( $files as $file ) {
-			// Check declared classes before
-			$classes_before = get_declared_classes();
-			
-			// Include the file
-			require_once $file;
-			
-			// Check declared classes after
-			$classes_after = get_declared_classes();
-			$new_classes = array_diff( $classes_after, $classes_before );
-
-			foreach ( $new_classes as $class ) {
-				// Verify if it extends Elementor Widget_Base
-				if ( class_exists( $class ) && is_subclass_of( $class, '\Elementor\Widget_Base' ) ) {
-					$widgets_manager->register( new $class() );
-				}
-			}
-		}
-	}
-
-	public function enqueue_assets() {
-		$version = '1.0.0'; // You might want dynamic versioning based on filemtime
-		
-		// Enqueue CSS
-		$css_dir = get_stylesheet_directory() . '/custom-widgets/assets/css/';
-		$css_uri = get_stylesheet_directory_uri() . '/custom-widgets/assets/css/';
-		if ( is_dir( $css_dir ) ) {
-			foreach ( glob( $css_dir . '*.css' ) as $file ) {
-				$handle = 'custom-widget-' . basename( $file, '.css' );
-				wp_enqueue_style( $handle, $css_uri . basename( $file ), [], $version );
-			}
-		}
-
-		// Enqueue JS
-		$js_dir = get_stylesheet_directory() . '/custom-widgets/assets/js/';
-		$js_uri = get_stylesheet_directory_uri() . '/custom-widgets/assets/js/';
-		if ( is_dir( $js_dir ) ) {
-			foreach ( glob( $js_dir . '*.js' ) as $file ) {
-				$handle = 'custom-widget-' . basename( $file, '.js' );
-				wp_enqueue_script( $handle, $js_uri . basename( $file ), [ 'jquery', 'elementor-frontend' ], $version, true );
-			}
 		}
 	}
 

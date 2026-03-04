@@ -63,11 +63,7 @@ class Elementor_Breadcrumbs_Widget extends \Elementor\Widget_Base {
 	 * @return array Widget scripts dependencies.
 	 */
 	public function get_script_depends() {
-		// Enqueue script if it hasn't been enqueued yet.
-		// Note: The loader typically handles enqueuing, but for a standalone export, proper registration is key.
-		// Given the user constraint of a self-contained folder, we register it here if needed.
-		wp_register_script( 'elementor-breadcrumbs-js', plugin_dir_url( __FILE__ ) . 'elementor-breadcrumbs.js', [ 'jquery' ], '1.0.0', true );
-		return [ 'elementor-breadcrumbs-js' ];
+		return [ 'ag-widget-elementor-breadcrumbs' ];
 	}
 
 	/**
@@ -76,8 +72,7 @@ class Elementor_Breadcrumbs_Widget extends \Elementor\Widget_Base {
 	 * @return array Widget styles dependencies.
 	 */
 	public function get_style_depends() {
-		wp_register_style( 'elementor-breadcrumbs-css', plugin_dir_url( __FILE__ ) . 'elementor-breadcrumbs.css', [], '1.0.0' );
-		return [ 'elementor-breadcrumbs-css' ];
+		return [ 'ag-widget-elementor-breadcrumbs' ];
 	}
 
 	/**

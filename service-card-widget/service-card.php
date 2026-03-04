@@ -69,6 +69,14 @@ class Elementor_Service_Card_Widget extends \Elementor\Widget_Base {
 		return [ 'general' ];
 	}
 
+	public function get_script_depends() {
+		return [ 'ag-widget-service-card' ];
+	}
+
+	public function get_style_depends() {
+		return [ 'ag-widget-service-card' ];
+	}
+
 	/**
 	 * Register service card widget controls.
 	 *

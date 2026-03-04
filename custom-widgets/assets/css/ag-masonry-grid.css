@@ -1,0 +1,31 @@
+/* 
+ * CSS para AG Masonry Grid
+ * Handled by loader con nombre de handle: ag-widget-ag-masonry-grid
+ */
+.ag-masonry-grid-wrapper {
+	background-color: #f9f9f9;
+	padding: 20px;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+}
+
+.ag-masonry-title {
+	color: #333;
+	margin-bottom: 15px;
+	font-size: 1.5rem;
+}
+
+.ag-masonry-grid-content {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 15px;
+}
+
+.ag-masonry-item {
+	background: #fff;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+	text-align: center;
+}

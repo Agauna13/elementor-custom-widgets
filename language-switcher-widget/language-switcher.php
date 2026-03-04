@@ -30,30 +30,13 @@ class Elementor_Language_Switcher_Widget extends \Elementor\Widget_Base {
 		return [ 'language', 'switcher', 'menu', 'dropdown', 'wpml', 'translate' ];
 	}
 
-public function get_script_depends() {
+	public function get_script_depends() {
+		return [ 'ag-widget-language-switcher' ];
+	}
 
-	wp_register_script(
-		'rw-language-switcher-js',
-		get_stylesheet_directory_uri() . '/custom-widgets/assets/js/language-switcher.js',
-		[ 'jquery' ],
-		filemtime( get_stylesheet_directory() . '/custom-widgets/assets/js/language-switcher.js' ),
-		true
-	);
-
-	return [ 'rw-language-switcher-js' ];
-}
-
-public function get_style_depends() {
-
-	wp_register_style(
-		'rw-language-switcher-css',
-		get_stylesheet_directory_uri() . '/custom-widgets/assets/css/language-switcher.css',
-		[],
-		filemtime( get_stylesheet_directory() . '/custom-widgets/assets/css/language-switcher.css' )
-	);
-
-	return [ 'rw-language-switcher-css' ];
-}
+	public function get_style_depends() {
+		return [ 'ag-widget-language-switcher' ];
+	}
 
 	protected function register_controls() {
 		$this->register_content_controls();

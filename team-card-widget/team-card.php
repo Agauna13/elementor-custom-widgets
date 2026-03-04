@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Elementor_Team_Card_Widget extends \Elementor\Widget_Base {
 
 	public function get_style_depends() {
-		return [ 'team-card-style' ];
+		return [ 'ag-widget-team-card' ];
 	}
 
 	public function get_script_depends() {
-		return [ 'team-card-script' ];
+		return [ 'ag-widget-team-card' ];
 	}
 
 	/**
@@ -824,13 +824,6 @@ class Elementor_Team_Card_Widget extends \Elementor\Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-
-		// Register dependencies
-		wp_register_style( 'team-card-style', plugins_url( 'team-card.css', __FILE__ ) );
-		wp_register_script( 'team-card-script', plugins_url( 'team-card.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
-
-		wp_enqueue_style( 'team-card-style' );
-		wp_enqueue_script( 'team-card-script' );
 
 		$this->add_render_attribute( 'wrapper', 'class', 'team-card-wrapper' );
 		

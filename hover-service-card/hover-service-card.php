@@ -26,11 +26,11 @@ class Elementor_Hover_Service_Card_Widget extends \Elementor\Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return [ 'hover-service-card-script' ];
+		return [ 'ag-widget-hover-service-card' ];
 	}
 
 	public function get_style_depends() {
-		return [ 'hover-service-card-style' ];
+		return [ 'ag-widget-hover-service-card' ];
 	}
 	
 	protected function register_controls() {
@@ -540,13 +540,6 @@ class Elementor_Hover_Service_Card_Widget extends \Elementor\Widget_Base {
 
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-
-		// Register dependencies
-		wp_register_style( 'hover-service-card-style', plugins_url( 'hover-service-card.css', __FILE__ ) );
-		wp_register_script( 'hover-service-card-script', plugins_url( 'hover-service-card.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
-
-		wp_enqueue_style( 'hover-service-card-style' );
-		wp_enqueue_script( 'hover-service-card-script' );
 
 		// Wrapper Tag & Link Logic
 		$wrapper_tag = 'div';
